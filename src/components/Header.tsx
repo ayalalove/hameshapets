@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { site } from '../config';
 import Brand from './Brand';
-import Icon from './Icon';
 
 const links = [
   { href: '#services', label: 'שירותים' },
@@ -39,10 +37,6 @@ export default function Header() {
         </nav>
 
         <div className="header__actions">
-          <a href={site.phoneHref} className="header__phone" dir="ltr">
-            <Icon name="phone" size={18} />
-            <span>{site.phoneDisplay}</span>
-          </a>
           <a href="#contact" className="btn btn--sm header__cta">
             הצעת מחיר
           </a>

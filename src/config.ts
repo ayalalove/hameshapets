@@ -3,7 +3,6 @@ export const site = {
   name: "המשפץ",
   subtitle: "HOUSE BUILDING",
   phoneDisplay: "054-349-5856",
-  phoneHref: "tel:+972543495856",
   // מספר וואטסאפ בפורמט בינלאומי, בלי + ובלי 0 בהתחלה
   whatsapp: "972543495856",
   area: "ירושלים והסביבה",

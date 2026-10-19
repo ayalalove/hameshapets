@@ -70,9 +70,7 @@ export default function Contact() {
           <ul className="contact__list">
             <li>
               <Icon name="phone" size={20} />
-              <a href={site.phoneHref} dir="ltr">
-                {site.phoneDisplay}
-              </a>
+              <span dir="ltr">{site.phoneDisplay}</span>
             </li>
             <li>
               <WhatsAppIcon size={20} />

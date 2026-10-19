@@ -284,14 +284,6 @@ ol {
   gap: 18px;
 }
 
-.header__phone {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  color: var(--teal-700);
-}
-
 .burger {
   display: none;
   width: 42px;
@@ -1436,7 +1428,7 @@ ol {
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 40px;
   padding-bottom: 56px;
 }
@@ -1659,9 +1651,6 @@ ol {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .header__phone span {
-    display: none;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -1720,14 +1709,6 @@ ol {
 
   .header__cta {
     display: none;
-  }
-
-  .header__phone {
-    width: 42px;
-    height: 42px;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--teal-50);
   }
 
   .brand img {
