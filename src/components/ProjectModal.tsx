@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react';
 import type { Project } from '../data/projects';
 import Icon from './Icon';
 
@@ -7,13 +7,46 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
+const SWIPE_PX = 50;
+
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [index, setIndex] = useState(0);
+  // כיוון המעבר – קובע מאיזה צד התמונה החדשה נכנסת
+  const [dir, setDir] = useState<'next' | 'prev' | null>(null);
+  const touchX = useRef<number | null>(null);
+  const thumbsRef = useRef<HTMLDivElement>(null);
   const count = project.media.length;
   const current = project.media[index];
 
-  const next = () => setIndex((i) => (i + 1) % count);
-  const prev = () => setIndex((i) => (i - 1 + count) % count);
+  const next = () => {
+    setDir('next');
+    setIndex((i) => (i + 1) % count);
+  };
+  const prev = () => {
+    setDir('prev');
+    setIndex((i) => (i - 1 + count) % count);
+  };
+  const goTo = (i: number) => {
+    setDir(i > index ? 'next' : 'prev');
+    setIndex(i);
+  };
+
+  // ב-RTL: החלקה ימינה = הבא
+  const onTouchStart = (e: TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    if (touchX.current === null || count < 2) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    if (dx > SWIPE_PX) next();
+    if (dx < -SWIPE_PX) prev();
+    touchX.current = null;
+  };
+
+  // התמונה הקטנה הפעילה תמיד בתוך התצוגה
+  useEffect(() => {
+    thumbsRef.current?.children[index]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [index]);
 
   useEffect(() => {
     // ב-RTL: חץ שמאלה = הבא, חץ ימינה = הקודם
@@ -37,12 +70,24 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           <Icon name="close" size={22} />
         </button>
 
-        <div className="modal__stage">
+        <div className="modal__stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           {current?.type === 'image' && (
-            <img key={current.src} src={current.src} alt={`${project.title} – ${index + 1}`} />
+            <img
+              key={current.src}
+              className={dir ? `slide-${dir}` : 'zoom-in'}
+              src={current.src}
+              alt={`${project.title} – ${index + 1}`}
+            />
           )}
           {current?.type === 'video' && (
-            <video key={current.src} src={current.src} controls autoPlay playsInline />
+            <video
+              key={current.src}
+              className={dir ? `slide-${dir}` : 'zoom-in'}
+              src={current.src}
+              controls
+              autoPlay
+              playsInline
+            />
           )}
           {!current && (
             <div className="placeholder">
@@ -74,12 +119,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             <p className="modal__desc">{project.description}</p>
           </div>
           {count > 1 && (
-            <div className="thumbs">
+            <div className="thumbs" ref={thumbsRef}>
               {project.media.map((m, i) => (
                 <button
                   key={m.src}
                   className={`thumb ${i === index ? 'thumb--active' : ''}`}
-                  onClick={() => setIndex(i)}
+                  style={{ animationDelay: `${Math.min(i, 16) * 30}ms` }}
+                  onClick={() => goTo(i)}
                   aria-label={`${m.type === 'video' ? 'סרטון' : 'תמונה'} ${i + 1}`}
                 >
                   {m.type === 'image' ? (

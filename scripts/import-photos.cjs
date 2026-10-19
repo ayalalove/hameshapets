@@ -17,7 +17,8 @@ const projects = {
   'therapy-room': [57, 62, 59, 58, 54, 55, 61, 48, 49, 50, 53, 45, 46],
   'focus-clinic': [63, 67, 68, 69, 64, 65, 66],
 };
-const HERO = 13;
+// תמונות ה-hero – מתחלפות לפי הסדר
+const HERO = [13, 47, 57, 4];
 
 const index = JSON.parse(fs.readFileSync('raw/index.json', 'utf8'));
 const fileOf = (n) => path.join(RAW, index.find((x) => x.n === n).file);
@@ -44,7 +45,9 @@ const convert = (n, file, width = 1600) =>
 
   fs.mkdirSync(HERO_OUT, { recursive: true });
   for (const f of fs.readdirSync(HERO_OUT)) if (f !== '.gitkeep') fs.rmSync(path.join(HERO_OUT, f));
-  await convert(HERO, path.join(HERO_OUT, 'hero.webp'), 1600);
+  for (const [i, n] of HERO.entries()) {
+    await convert(n, path.join(HERO_OUT, `${String(i + 1).padStart(2, '0')}.webp`), 1600);
+  }
 
-  console.log(`סה"כ ${total} תמונות + תמונת hero`);
+  console.log(`סה"כ ${total} תמונות + ${HERO.length} תמונות hero`);
 })();
