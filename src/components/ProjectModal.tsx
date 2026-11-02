@@ -152,10 +152,11 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   );
 }
 
-// מנסה לנגן עם קול. אם הדפדפן חוסם (בעיקר ספארי באייפון) – מנגן בלי קול ומציג כפתור "הפעלת קול"
+// מנסה לנגן עם קול. אם הדפדפן חוסם (בעיקר ספארי באייפון) – מנגן בלי קול.
+// כפתור הקול מוצג תמיד, כדי שאפשר יהיה לראות את המצב ולשנות אותו בלחיצה.
 function ModalVideo({ src, className }: { src: string; className: string }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [blocked, setBlocked] = useState(false);
+  const [muted, setMuted] = useState(false);
 
   useEffect(() => {
     const video = ref.current;
@@ -163,17 +164,16 @@ function ModalVideo({ src, className }: { src: string; className: string }) {
     video.muted = false;
     video.play().catch(() => {
       video.muted = true;
-      setBlocked(true);
       video.play().catch(() => {});
     });
   }, []);
 
-  const unmute = () => {
+  const toggleSound = () => {
     const video = ref.current;
     if (!video) return;
-    video.muted = false;
+    video.muted = !video.muted;
+    if (!video.muted && video.volume === 0) video.volume = 1;
     video.play().catch(() => {});
-    setBlocked(false);
   };
 
   return (
@@ -185,14 +185,12 @@ function ModalVideo({ src, className }: { src: string; className: string }) {
         controls
         loop
         playsInline
-        onVolumeChange={(e) => !e.currentTarget.muted && setBlocked(false)}
+        onVolumeChange={(e) => setMuted(e.currentTarget.muted || e.currentTarget.volume === 0)}
       />
-      {blocked && (
-        <button className="modal__unmute" onClick={unmute}>
-          <Icon name="volume" size={18} />
-          הפעלת קול
-        </button>
-      )}
+      <button className="modal__unmute" onClick={toggleSound}>
+        <Icon name={muted ? 'volumeOff' : 'volume'} size={18} />
+        {muted ? 'הפעלת קול' : 'השתקה'}
+      </button>
     </>
   );
 }
