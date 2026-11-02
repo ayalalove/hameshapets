@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react';
 import type { Project } from '../data/projects';
 import Icon from './Icon';
+import useDialog from '../hooks/useDialog';
 
 interface ProjectModalProps {
   project: Project;
@@ -48,24 +49,26 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     thumbsRef.current?.children[index]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }, [index]);
 
+  // פוקוס, Escape ונעילת גלילה
+  const panelRef = useDialog<HTMLDivElement>(onClose);
+
   useEffect(() => {
     // ב-RTL: חץ שמאלה = הבא, חץ ימינה = הקודם
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
       if (count > 1 && e.key === 'ArrowLeft') next();
       if (count > 1 && e.key === 'ArrowRight') prev();
     };
     document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
-  }, [count, onClose]);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [count]);
 
   return (
     <div className="modal" role="dialog" aria-modal="true" aria-label={project.title} onClick={onClose}>
-      <div className="modal__panel" onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
+      <div
+        className="modal__panel"
+        ref={panelRef}
+        onClick={(e: MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+      >
         <button className="modal__close" onClick={onClose} aria-label="סגירה">
           <Icon name="close" size={22} />
         </button>
@@ -80,13 +83,10 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             />
           )}
           {current?.type === 'video' && (
-            <video
+            <ModalVideo
               key={current.src}
               className={dir ? `slide-${dir}` : 'zoom-in'}
               src={current.src}
-              controls
-              autoPlay
-              playsInline
             />
           )}
           {!current && (
@@ -103,8 +103,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
               <button className="modal__nav modal__nav--next" onClick={next} aria-label="הבא">
                 <Icon name="arrowLeft" />
               </button>
-              <span className="modal__counter">
+              <span className="modal__counter" aria-hidden="true">
                 {index + 1} / {count}
+              </span>
+              {/* מוקרא בקורא מסך בכל מעבר תמונה */}
+              <span className="sr-only" aria-live="polite">
+                תמונה {index + 1} מתוך {count}
               </span>
             </>
           )}
@@ -145,5 +149,50 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+// מנסה לנגן עם קול. אם הדפדפן חוסם (בעיקר ספארי באייפון) – מנגן בלי קול ומציג כפתור "הפעלת קול"
+function ModalVideo({ src, className }: { src: string; className: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+    video.muted = false;
+    video.play().catch(() => {
+      video.muted = true;
+      setBlocked(true);
+      video.play().catch(() => {});
+    });
+  }, []);
+
+  const unmute = () => {
+    const video = ref.current;
+    if (!video) return;
+    video.muted = false;
+    video.play().catch(() => {});
+    setBlocked(false);
+  };
+
+  return (
+    <>
+      <video
+        ref={ref}
+        className={className}
+        src={src}
+        controls
+        loop
+        playsInline
+        onVolumeChange={(e) => !e.currentTarget.muted && setBlocked(false)}
+      />
+      {blocked && (
+        <button className="modal__unmute" onClick={unmute}>
+          <Icon name="volume" size={18} />
+          הפעלת קול
+        </button>
+      )}
+    </>
   );
 }

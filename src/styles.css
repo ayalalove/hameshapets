@@ -12,7 +12,7 @@
 
   --ink: #23272a;
   --ink-soft: #454b50;
-  --muted: #6b7479;
+  --muted: #5f686d;
   --line: #e2e8e9;
   --bg: #ffffff;
   --wa: #25d366;
@@ -117,7 +117,7 @@ ol {
 .center-row {
   display: flex;
   justify-content: center;
-  margin-top: 48px;
+  margin-top: 36px;
 }
 
 /* ========== Buttons ========== */
@@ -214,7 +214,7 @@ ol {
   font-size: 0.6rem;
   font-weight: 500;
   letter-spacing: 0.22em;
-  color: var(--teal-500);
+  color: var(--teal-600);
   direction: ltr;
   text-align: right;
 }
@@ -344,7 +344,7 @@ ol {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 35%;
+  object-position: center;
   z-index: -2;
   opacity: 0;
   transition: opacity 1.6s ease;
@@ -425,6 +425,63 @@ ol {
 
 .hero__bar.is-active span::after {
   animation: progress var(--slide-ms) linear forwards;
+}
+
+.hero__toggle {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-inline-end: 6px;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hero__toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
+
+.hero--paused .hero__bg.is-active,
+.hero--paused .hero__bar.is-active span::after {
+  animation-play-state: paused;
+}
+
+/* נגישות: קישור "דלג לתוכן" – מופיע רק בניווט מקלדת */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 200;
+  padding: 10px 18px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--teal-800);
+  border-radius: 8px;
+  transform: translateY(-160%);
+  transition: transform 0.2s;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+main:focus {
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .hero__overlay {
@@ -513,14 +570,14 @@ ol {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: var(--teal-500);
+  color: var(--teal-600);
   font-size: 0.9rem;
   background: var(--teal-50);
 }
 
 /* ========== Sections ========== */
 .section {
-  padding-block: clamp(80px, 10vw, 128px);
+  padding-block: clamp(56px, 6vw, 80px);
 }
 
 .section--tint {
@@ -545,7 +602,7 @@ ol {
 
 .section-heading {
   max-width: 680px;
-  margin-bottom: clamp(44px, 6vw, 64px);
+  margin-bottom: clamp(32px, 4.5vw, 48px);
 }
 
 .section-heading--center {
@@ -558,7 +615,7 @@ ol {
   margin-bottom: 14px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--teal-500);
+  color: var(--teal-600);
 }
 
 .section-heading h2 {
@@ -581,10 +638,32 @@ ol {
 }
 
 /* ========== Services ========== */
+/* בין השירותים לתיק העבודות – הרקע מתחלף, אז אין צורך בריווח כפול */
+#services {
+  padding-bottom: clamp(32px, 3.5vw, 44px);
+}
+
+#projects {
+  padding-top: clamp(36px, 4vw, 52px);
+}
+
 .tiles {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(16px, 2vw, 28px);
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(14px, 1.6vw, 22px);
+}
+
+/* 5 אריחים בשורה – טקסט קצת יותר קומפקטי */
+.tiles .tile__body {
+  padding: 26px 22px;
+}
+
+.tiles .tile h3 {
+  font-size: 1.4rem;
+}
+
+.tiles .tile p {
+  font-size: 0.92rem;
 }
 
 .tile {
@@ -685,7 +764,7 @@ ol {
 }
 
 .extras {
-  margin-top: 56px;
+  margin-top: 40px;
   text-align: center;
 }
 
@@ -951,6 +1030,13 @@ ol {
   border-radius: 100px;
 }
 
+/* "▶ סרטון" בתג של הכרטיס */
+.work__count-sep {
+  padding-inline-end: 7px;
+  margin-inline-end: 3px;
+  border-inline-end: 1px solid rgba(14, 80, 90, 0.25);
+}
+
 /* לפני שיש תמונות – טקסטורת הלוגו */
 .work .placeholder {
   background: var(--planks);
@@ -1045,6 +1131,24 @@ ol {
   left: 16px;
 }
 
+.modal__unmute {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--teal-800);
+  background: #fff;
+  border-radius: 100px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: zoom-in 0.4s var(--ease) both;
+}
+
 .modal__counter {
   position: absolute;
   bottom: 14px;
@@ -1084,7 +1188,7 @@ ol {
 .modal__meta {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--teal-500);
+  color: var(--teal-600);
   margin-bottom: 8px;
 }
 
@@ -1394,7 +1498,7 @@ ol {
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: #9aa7ab;
+  color: #66727a;
 }
 
 .field--error input,
@@ -1421,7 +1525,7 @@ ol {
 
 /* ========== Footer ========== */
 .footer {
-  padding-top: 72px;
+  padding-top: 56px;
   background: #1b2124;
   color: rgba(255, 255, 255, 0.75);
 }
@@ -1430,11 +1534,16 @@ ol {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 40px;
-  padding-bottom: 56px;
+  padding-bottom: 40px;
 }
 
 .footer .brand {
   color: #fff;
+}
+
+/* על הרקע הכהה – טורקיז בהיר, בשביל ניגודיות */
+.footer .brand__text small {
+  color: var(--teal-400);
 }
 
 .footer__brand p {
@@ -1482,6 +1591,107 @@ ol {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.footer__a11y {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s;
+}
+
+.footer__a11y:hover {
+  color: #fff;
+}
+
+/* חלון הצהרת הנגישות */
+.statement {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: clamp(28px, 4vw, 44px);
+  color: var(--ink);
+  background: #fff;
+  border-radius: var(--radius);
+  animation: rise 0.45s var(--ease);
+}
+
+.statement h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.statement h3 {
+  margin: 24px 0 8px;
+  font-size: 1.1rem;
+  color: var(--teal-700);
+}
+
+.statement p,
+.statement li {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+}
+
+.statement ul {
+  display: grid;
+  gap: 6px;
+  padding-inline-start: 20px;
+  list-style: disc;
+}
+
+.statement__contact {
+  list-style: none !important;
+  padding-inline-start: 0 !important;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.statement a {
+  color: var(--teal-700);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.statement__date {
+  margin-top: 24px;
+  font-size: 0.85rem !important;
+  color: var(--muted) !important;
+}
+
+.credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.credit strong {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.credit__link {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-inline-start: 4px;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  transition: color 0.2s, background 0.2s;
+}
+
+.credit__link:hover {
+  color: #fff;
+  background: #0a66c2;
 }
 
 /* ========== WhatsApp floating button ========== */
@@ -1651,6 +1861,12 @@ ol {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* מספר אי-זוגי של אריחים – האחרון תופס את כל השורה */
+  .tile:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    min-height: 320px;
+  }
+
 }
 
 @media (max-width: 1024px) {
@@ -1719,7 +1935,6 @@ ol {
     font-size: 1.35rem;
   }
 
-  .tiles,
   .contact {
     grid-template-columns: 1fr;
   }
@@ -1791,5 +2006,336 @@ ol {
     left: 18px;
     width: 56px;
     height: 56px;
+  }
+}
+
+/* ========== טלפון – גרסה קומפקטית ========== */
+@media (max-width: 600px) {
+  /* שורה תחתונה אחת: הצהרת נגישות | עיצוב ופיתוח.
+     ריווח בתחתית כדי שכפתור הוואטסאפ הצף לא יסתיר את הטקסט */
+  .footer__bottom {
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding-block: 16px 88px;
+    font-size: 0.8rem;
+  }
+
+  .credit__link {
+    width: 24px;
+    height: 24px;
+  }
+
+  #services {
+    padding-bottom: 24px;
+  }
+
+  #projects {
+    padding-top: 28px;
+  }
+
+  .section {
+    padding-block: 40px;
+  }
+
+  .section-heading {
+    margin-bottom: 22px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.75rem;
+  }
+
+  .section-heading__lead {
+    margin-top: 12px;
+    font-size: 0.97rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 8px;
+    font-size: 0.82rem;
+  }
+
+  /* Hero */
+  .hero__content {
+    padding-block: 52px 72px;
+  }
+
+  .hero__kicker {
+    margin-bottom: 16px;
+    font-size: 0.8rem;
+  }
+
+  .hero__title {
+    font-size: 2.35rem;
+  }
+
+  .hero__lead {
+    margin-top: 16px;
+    font-size: 1rem;
+  }
+
+  .hero__actions {
+    margin-top: 26px;
+    gap: 10px;
+  }
+
+  .hero__actions .btn {
+    padding-block: 13px;
+  }
+
+  .badges {
+    margin-top: 28px;
+    font-size: 0.88rem;
+  }
+
+  /* שירותים: 2 בשורה, בלי תיאור */
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .tile,
+  .tile:last-child:nth-child(odd) {
+    min-height: 170px;
+  }
+
+  .tiles .tile__body {
+    padding: 14px;
+  }
+
+  .tile__icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 10px;
+  }
+
+  .tile__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .tiles .tile h3 {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .tiles .tile p {
+    display: none;
+  }
+
+  .tile__link {
+    margin-top: 8px;
+    font-size: 0.82rem;
+  }
+
+  .extras {
+    margin-top: 26px;
+  }
+
+  .extras__title {
+    font-size: 1.05rem;
+    margin-bottom: 14px;
+  }
+
+  .extras__list {
+    gap: 8px;
+  }
+
+  .extras__list li {
+    padding: 8px 14px;
+    gap: 7px;
+    font-size: 0.88rem;
+  }
+
+  .extras__list svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* גלריה: 2 עמודות, הראשון והאחרון ברוחב מלא */
+  .filters {
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .chip {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+
+  .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 160px;
+    gap: 10px;
+  }
+
+  /* הראשון רחב; אם האחרון נשאר לבד בשורה – גם הוא רחב */
+  .work:first-child,
+  .work:last-child:nth-child(even) {
+    grid-column: 1 / -1;
+    grid-row: span 1;
+  }
+
+  .work__caption {
+    padding: 12px 14px;
+    gap: 2px;
+  }
+
+  .work__caption small {
+    font-size: 0.72rem;
+  }
+
+  .work__caption strong {
+    font-size: 1rem;
+  }
+
+  .work__count {
+    top: 10px;
+    right: 10px;
+    padding: 2px 9px;
+    font-size: 0.72rem;
+  }
+
+  /* למה אנחנו: 2 בשורה */
+  .reasons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .reason {
+    padding: 22px 12px;
+  }
+
+  .reason__icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+  }
+
+  .reason__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .reason h3 {
+    font-size: 1.02rem;
+    margin-bottom: 6px;
+  }
+
+  .reason p {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  /* תהליך */
+  .steps {
+    gap: 18px;
+  }
+
+  .step {
+    padding-top: 16px;
+  }
+
+  .step__num {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  .step h3 {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+  }
+
+  .step p {
+    font-size: 0.9rem;
+  }
+
+  /* שאלות */
+  .faq__item summary {
+    padding: 16px 18px;
+    font-size: 1rem;
+  }
+
+  .faq__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .faq__item p {
+    padding: 0 18px 18px;
+    font-size: 0.93rem;
+  }
+
+  /* צור קשר */
+  .contact {
+    gap: 24px;
+  }
+
+  .contact__list {
+    gap: 12px;
+    font-size: 0.97rem;
+  }
+
+  /* כרטיס צר וממורכז – יותר מהרקע הכהה נראה מסביב */
+  .form {
+    width: 100%;
+    max-width: 330px;
+    margin-inline: auto;
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .form__row {
+    gap: 12px;
+  }
+
+  .field {
+    gap: 5px;
+  }
+
+  .field__label {
+    font-size: 0.8rem;
+  }
+
+  /* הטקסט נשאר 16px – פחות מזה גורם לאייפון לעשות זום בלחיצה על שדה */
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+
+  .field select {
+    padding-left: 32px;
+    background-position: left 12px center;
+  }
+
+  .field textarea {
+    height: 76px;
+    min-height: 76px;
+  }
+
+  .field__error {
+    font-size: 0.75rem;
+  }
+
+  .form .btn {
+    margin-top: 2px;
+    padding-block: 12px;
+    font-size: 1rem;
+  }
+
+  .footer {
+    padding-top: 36px;
+  }
+
+  .footer__grid {
+    gap: 22px;
+    padding-bottom: 28px;
+  }
+
+  .center-row {
+    margin-top: 24px;
   }
 }

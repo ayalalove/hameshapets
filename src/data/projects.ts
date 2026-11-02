@@ -26,17 +26,37 @@ export interface Project {
 
 const isVideo = (path: string) => /\.(mp4|webm|mov)$/i.test(path);
 
+// סרטונים קודם – כשפותחים עבודה, הסרטון הוא הדבר הראשון שרואים. השאר לפי סדר שם הקובץ.
 function mediaFor(folder: string): Media[] {
   return Object.keys(files)
     .filter((path) => path.includes(`/projects/${folder}/`))
     .sort()
-    .map((path) => ({ type: isVideo(path) ? 'video' : 'image', src: files[path] }));
+    .map((path): Media => ({ type: isVideo(path) ? 'video' : 'image', src: files[path] }))
+    .sort((a, b) => Number(b.type === 'video') - Number(a.type === 'video'));
 }
 
 type ProjectEntry = Omit<Project, 'media' | 'cover'>;
 
 // הסדר כאן הוא סדר ההצגה בגלריה
 const entries: ProjectEntry[] = [
+  {
+    id: 'royal-cornices',
+    title: 'קרניזים לבית בעיצוב מלכותי',
+    category: 'קרניזים ועיצוב פנים',
+    location: '',
+    description:
+      'התקנת קרניזים ומסגרות דקורטיביות בכל הבית: תקרות מדורגות עם תאורת לד נסתרת, מסגרות קיר עם פסי זהב וטפט, ושילוב גופי תאורה – מראה יוקרתי ומוקפד בכל חדר.',
+    folder: 'royal-cornices',
+  },
+  {
+    id: 'pergola-led',
+    title: 'פרגולה עם הצללה ותאורת לד שקועה',
+    category: 'פרגולות ודקים',
+    location: '',
+    description:
+      'פרגולת הצללה לאורך כל המרפסת, עם פסי תאורת לד שקועים בקורות – מרפסת שנעים לשבת בה גם ביום וגם בערב. כולל סרטון.',
+    folder: 'pergola-led',
+  },
   {
     id: 'flower-shop',
     title: 'שיפוץ חנות פרחים',
@@ -47,9 +67,36 @@ const entries: ProjectEntry[] = [
     folder: 'flower-shop',
   },
   {
+    id: 'aron-kodesh',
+    title: 'בניית ארון קודש מפואר',
+    category: 'עבודות עץ ושערים',
+    location: '',
+    description:
+      'בניית ארון קודש בהתאמה אישית: עמודים קלאסיים, כרכוב מעוטר, דלתות עם תאורה אחורית ותאורת לד בבסיס – מהשלד ועד הגימור האחרון.',
+    folder: 'aron-kodesh',
+  },
+  {
+    id: 'pergola-sunroof',
+    title: 'פרגולה עוצמתית עם סנטף',
+    category: 'פרגולות ודקים',
+    location: '',
+    description:
+      'פרגולת ברזל גדולה עם קירוי סנטף על מרפסת גג – מספקת צל ומחסה מגשם, עם תאורה משולבת. כולל סרטון.',
+    folder: 'pergola-sunroof',
+  },
+  {
+    id: 'storage-to-studio',
+    title: 'ממחסן נטוש ליחידת סטודיו מפנקת',
+    category: 'בנייה קלה',
+    location: '',
+    description:
+      'הפיכת מחסן ישן ליחידת סטודיו מלאה: ריצוף, איטום, חדר רחצה עם מקלחון, מטבחון, חשמל ותאורה – יחידה מוכנה למגורים. כולל סרטון ותמונות מהתהליך.',
+    folder: 'storage-to-studio',
+  },
+  {
     id: 'pergola-balcony',
     title: 'פרגולה וסגירת מרפסת',
-    category: 'פרגולות וסגירות',
+    category: 'פרגולות ודקים',
     location: '',
     description:
       'פרגולת אלומיניום עם תאורת לד משולבת, סגירה בתריסי הצללה ומעקה זכוכית – הפכנו מרפסת פתוחה לחלל שימושי כל השנה.',
@@ -58,7 +105,7 @@ const entries: ProjectEntry[] = [
   {
     id: 'therapy-room',
     title: 'חדר טיפולים',
-    category: 'חדרים וקליניקות',
+    category: 'שיפוץ עסקים',
     location: '',
     description:
       'הפיכת חדר גולמי לחדר טיפולים מעוצב: ריצוף, טיח וצבע, קיר מודגש וחשמל ותאורה – מוכן לקבלת מטופלים.',
@@ -76,7 +123,7 @@ const entries: ProjectEntry[] = [
   {
     id: 'focus-clinic',
     title: 'קליניקה',
-    category: 'חדרים וקליניקות',
+    category: 'שיפוץ עסקים',
     location: '',
     description:
       'שיפוץ חדרי קליניקה: ריצוף, צבע, קיר מודגש, דלתות מתקפלות ותאורה – חלל נקי ומואר לעבודה עם קהל.',
@@ -101,6 +148,10 @@ export default projects;
 
 export const ALL = 'הכל';
 export const categories = [ALL, ...new Set(projects.map((p) => p.category))];
+
+export function hasProjects(category: string): boolean {
+  return projects.some((p) => p.category === category);
+}
 
 /** תמונת השער הראשונה שנמצאת בקטגוריה – לאריחי השירותים */
 export function coverForCategory(category: string): string | null {

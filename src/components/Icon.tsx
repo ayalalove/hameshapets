@@ -11,6 +11,11 @@ const paths = {
   pergola: <><path d="M3 6h18" /><path d="M5 6v15M19 6v15" /><path d="M8 3v3M12 3v3M16 3v3" /><path d="M5 10h14" /></>,
   gate: <><rect x="4" y="4" width="16" height="17" rx="1" /><path d="M4 4l16 17M20 4L4 21" /></>,
   wall:<><path d="M3 4h18v16H3z" /><path d="M3 9h18M3 14h18M9 4v5M15 9v5M9 14v6" /></>,
+  molding: <><rect x="3" y="3" width="18" height="18" rx="1" /><rect x="7" y="7" width="10" height="10" /><path d="M3 3l4 4M21 3l-4 4M3 21l4-4M21 21l-4-4" /></>,
+  zip:<><rect x="3" y="3" width="18" height="4" rx="1" /><path d="M5 7v13M19 7v13" /><path d="M7 7v11h10V7" /><path d="M7 11h10M7 15h10" /></>,
+  cabin:<><path d="M4 12l8-7 8 7" /><path d="M6.5 10v10h11V10" /><path d="M15.5 7.2V4.5h2v4.4" /><path d="M10.5 20v-4h3v4" /></>,
+  parquet:<><rect x="3" y="3" width="18" height="18" rx="1" /><path d="M3 10l4.5-4 4.5 4 4.5-4L21 10" /><path d="M3 17l4.5-4 4.5 4 4.5-4L21 17" /></>,
+  decor:<><path d="M8.5 13h7l-1.2 8H9.7z" /><path d="M12 13V7.5" /><path d="M12 10c-2.4 0-4-1.6-4-4 2.4 0 4 1.6 4 4z" /><path d="M12 8.5c2.4 0 4-1.6 4-4-2.4 0-4 1.6-4 4z" /></>,
   drop: <path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" />,
   hammer: <><path d="M14 4l6 6-3 3-6-6z" /><path d="M11 7l-8 8a2 2 0 0 0 3 3l8-8" /></>,
   shield: <><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z" /><path d="M8.5 12l2.5 2.5 4.5-5" /></>,
@@ -25,7 +30,9 @@ const paths = {
   plus: <path d="M12 5v14M5 12h14" />,
   arrowLeft: <path d="M15 5l-7 7 7 7" />,
   arrowRight: <path d="M9 5l7 7-7 7" />,
-  play: <path d="M8 5v14l11-7z" fill="currentColor" />,
+  volume: <><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" /><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11" /></>,
+  pause: <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />,
+  play:<path d="M8 5v14l11-7z" fill="currentColor" />,
   image: <><rect x="3" y="4" width="18" height="16" rx="1" /><circle cx="9" cy="10" r="2" /><path d="M21 16l-5-5-9 9" /></>,
 };
 
@@ -59,6 +66,14 @@ export function WhatsAppIcon({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z" />
+    </svg>
+  );
+}
+
+export function LinkedInIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
     </svg>
   );
 }

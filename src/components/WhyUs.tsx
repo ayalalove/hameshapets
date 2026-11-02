@@ -3,9 +3,9 @@ import SectionHeading from './SectionHeading';
 import useReveal from '../hooks/useReveal';
 
 const reasons: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'wallet', title: 'מחיר שקוף', text: 'הצעת מחיר מפורטת מראש, בלי תוספות מפתיעות באמצע העבודה.' },
-  { icon: 'calendar', title: 'עומדים בזמנים', text: 'לוח זמנים ברור לכל שלב – ועדכונים שוטפים לאורך הדרך.' },
-  { icon: 'sparkle', title: 'עבודה נקייה', text: 'שומרים על הבית ועל השכנים, ומפנים אחרינו בסוף כל יום.' },
+  { icon: 'wallet', title: 'שקיפות מול הלקוח', text: 'הצעת מחיר מפורטת מראש, בלי תוספות מפתיעות באמצע העבודה.' },
+  { icon: 'calendar', title: 'עמידה בזמנים', text: 'לוח זמנים ברור לכל שלב – ועדכונים שוטפים לאורך הדרך.' },
+  { icon: 'sparkle', title: 'עבודה מסודרת ונקיה', text: 'שומרים על הבית ועל השכנים, ומפנים אחרינו בסוף כל יום.' },
   { icon: 'shield', title: 'אחריות מלאה', text: 'עומדים מאחורי כל עבודה שלנו גם אחרי המסירה.' },
 ];
 

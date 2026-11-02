@@ -17,8 +17,11 @@ export default function App() {
 
   return (
     <>
+      <a href="#main" className="skip-link">
+        דלג לתוכן
+      </a>
       <Header />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
         <Services onSelectCategory={setGalleryFilter} />
         <Gallery filter={galleryFilter} onFilterChange={setGalleryFilter} />

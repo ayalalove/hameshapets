@@ -1,4 +1,12 @@
-import { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  useId,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import { site, whatsappLink, workTypes } from '../config';
 import Icon, { WhatsAppIcon } from './Icon';
 import SectionHeading from './SectionHeading';
@@ -52,7 +60,13 @@ export default function Contact() {
     e.preventDefault();
     const found = validate(form);
     setErrors(found);
-    if (Object.keys(found).length) return;
+    const firstError = Object.keys(found)[0];
+    if (firstError) {
+      // מעבירים את הפוקוס לשדה השגוי הראשון – קורא המסך יקריא אותו עם השגיאה
+      const el = e.currentTarget.elements.namedItem(firstError) as HTMLElement | null;
+      requestAnimationFrame(() => el?.focus());
+      return;
+    }
 
     window.open(whatsappLink(buildMessage(form)), '_blank', 'noopener');
     setSent(true);
@@ -92,10 +106,11 @@ export default function Contact() {
         <form className="form" onSubmit={onSubmit} noValidate>
           <div className="form__row">
             <Field label="שם מלא" error={errors.name}>
-              <input value={form.name} onChange={update('name')} autoComplete="name" />
+              <input name="name" value={form.name} onChange={update('name')} autoComplete="name" />
             </Field>
             <Field label="טלפון" error={errors.phone}>
               <input
+                name="phone"
                 value={form.phone}
                 onChange={update('phone')}
                 type="tel"
@@ -111,7 +126,7 @@ export default function Contact() {
               <input value={form.city} onChange={update('city')} autoComplete="address-level2" />
             </Field>
             <Field label="סוג עבודה" error={errors.workType}>
-              <select value={form.workType} onChange={update('workType')}>
+              <select name="workType" value={form.workType} onChange={update('workType')}>
                 <option value="" disabled>
                   בחרו…
                 </option>
@@ -153,15 +168,31 @@ interface FieldProps {
   children: ReactNode;
 }
 
+// נגישות: השדה מקושר לתווית ולהודעת השגיאה, ומסומן כחובה/שגוי לקוראי מסך
 function Field({ label, error, optional, children }: FieldProps) {
+  const id = useId();
+  const errorId = `${id}-error`;
+  const control = isValidElement<Record<string, unknown>>(children)
+    ? cloneElement(children, {
+        id,
+        'aria-required': !optional,
+        'aria-invalid': !!error,
+        'aria-describedby': error ? errorId : undefined,
+      })
+    : children;
+
   return (
-    <label className={`field ${error ? 'field--error' : ''}`}>
-      <span className="field__label">
+    <div className={`field ${error ? 'field--error' : ''}`}>
+      <label className="field__label" htmlFor={id}>
         {label}
         {optional && <small> (לא חובה)</small>}
-      </span>
-      {children}
-      {error && <span className="field__error">{error}</span>}
-    </label>
+      </label>
+      {control}
+      {error && (
+        <span className="field__error" id={errorId}>
+          {error}
+        </span>
+      )}
+    </div>
   );
 }

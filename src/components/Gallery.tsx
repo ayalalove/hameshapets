@@ -19,6 +19,7 @@ function WorkCard({ project, index, onOpen }: { project: Project; index: number;
   const [armed, setArmed] = useState(false);
 
   const previews = project.media.filter((m) => m.type === 'image').slice(0, PREVIEW_COUNT);
+  const hasVideo = project.media.some((m) => m.type === 'video');
   const canPreview = previews.length > 1 && !reduced;
 
   useEffect(() => {
@@ -42,6 +43,7 @@ function WorkCard({ project, index, onOpen }: { project: Project; index: number;
       className="work work-reveal"
       style={{ transitionDelay: `${(index % 3) * 110}ms` }}
       onClick={onOpen}
+      aria-label={`${project.title}, ${project.category} – ${project.media.length} תמונות${hasVideo ? " וסרטון" : ""}. לצפייה בפרויקט`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
     >
@@ -68,6 +70,12 @@ function WorkCard({ project, index, onOpen }: { project: Project; index: number;
 
       {project.media.length > 1 && (
         <span className="work__count">
+          {hasVideo && (
+            <>
+              <Icon name="play" size={11} strokeWidth={0} />
+              <span className="work__count-sep">סרטון</span>
+            </>
+          )}
           <Icon name="image" size={14} />
           {project.media.length}
         </span>
@@ -117,12 +125,11 @@ export default function Gallery({ filter, onFilterChange }: GalleryProps) {
           לחצו על פרויקט כדי לראות את כל התמונות והסרטונים.
         </SectionHeading>
 
-        <div className="filters" role="tablist">
+        <div className="filters" role="group" aria-label="סינון עבודות לפי קטגוריה">
           {categories.map((c) => (
             <button
               key={c}
-              role="tab"
-              aria-selected={filter === c}
+              aria-pressed={filter === c}
               className={`chip ${filter === c ? 'chip--active' : ''}`}
               onClick={() => selectFilter(c)}
             >
